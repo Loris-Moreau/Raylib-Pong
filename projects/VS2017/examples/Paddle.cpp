@@ -1,11 +1,14 @@
 #include <raylib.h> 
 #include "Paddle.h" 
+#include "RectangleI.h"
 
 Paddle::Paddle()
 {
 	width = 32; 
 	height = 128; 
+
 	speedY = 4;
+
 	Paddle::x = 0;
 	Paddle::y = 200;
 }
@@ -44,4 +47,9 @@ void Paddle::Update()
 void Paddle::Draw() 
 {
 	DrawRectangle(x, y, width, height, WHITE);
+}
+
+RectangleI Paddle::GetRect()
+{
+	return RectangleI{ x, y, width, height };
 }

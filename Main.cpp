@@ -2,6 +2,7 @@
 #include "Ball.h"
 #include "Paddle.h"
 #include "RectangleI.h"
+#include "Collisions.h"
 
 #include <iostream>
 #include <string>
@@ -16,6 +17,7 @@ const int SCREEN_HEIGHT = 450;
 
 Ball ball;
 Paddle leftPaddle;
+Paddle rightPaddle;
 
 int main() 
 {
@@ -24,7 +26,9 @@ int main()
 	SetTargetFPS(60);
 
 	ball = Ball(100, 100, 32, 7);
+
 	leftPaddle = Paddle(0, 200, 32, 128, 4);
+	rightPaddle = Paddle(SCREEN_WIDTH-32, 200, 32, 128, 4);
 
 	// Main game loop 
 	while (!WindowShouldClose()) // Detect window close button or ESC key 
@@ -43,13 +47,22 @@ void Update()
 	ball.Update();
 	leftPaddle.Update();
 
-	RectangleI ballRect = ball.GetRect();
-	RectangleI leftPaddleRect = leftPaddle.GetRect();
+	RectangleI ballRect = ball.GetRectangle();
+
+	RectangleI leftPaddleRect = leftPaddle.GetRectangle();
 
 	bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
 	if (colliding)
 	{
 		ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
+	}
+
+	RectangleI rightPaddleRect = rightPaddle.GetRectangle();
+
+	colliding = Collisions::AABBCollision(ballRect, rightPaddleRect);
+	if (colliding)
+	{
+		ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
 	}
 }
 
@@ -58,8 +71,11 @@ void Draw()
 	BeginDrawing();
 
 	ClearBackground(BLACK);
+
 	ball.Draw();
+
 	leftPaddle.Draw();
+	rightPaddle.Draw();
 
 	EndDrawing();
 }

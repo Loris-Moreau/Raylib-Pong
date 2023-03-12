@@ -1,6 +1,6 @@
 #include "raylib.h" 
-#include "Ball.h" 
-#include <RectangleI.h>
+#include "Ball.h"
+#include "RectangleI.h"
 
 Ball::Ball() 
 {
@@ -54,18 +54,18 @@ void Ball::Draw()
 	DrawRectangle(x, y, size, size, WHITE);
 }
 
-RectangleI Ball::GetRect()
+RectangleI Ball::GetRectangle()
 {
-	return RectangleI{ x, y, width, height };
+	return RectangleI { x, y, width, height };
 }
 
-void HorizontalBounce(int newX);
+void Ball::HorizontalBounce(int newX)
 {
 	speedX = -speedX;
 	x = newX;
 }
 
-void VerticalBounce(int newY);
+void Ball::VerticalBounce(int newY)
 {
 	speedY = -speedY;
 	y = newY;

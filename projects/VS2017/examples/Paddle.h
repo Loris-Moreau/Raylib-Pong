@@ -15,7 +15,7 @@ public:
 	void Update();
 	void Draw();
 
-	RectangleI GetRect();
+	RectangleI GetRectangle();
 
 private:
 	int x;

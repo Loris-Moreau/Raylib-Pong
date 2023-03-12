@@ -17,7 +17,7 @@ public:
 	void HorizontalBounce(int newX);
 	void VerticalBounce(int newY);
 	
-	RectangleI GetRect();
+	RectangleI GetRectangle();
 
 private:
 	int x;

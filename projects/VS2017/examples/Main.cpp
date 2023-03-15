@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "Ball.h"
 #include "Paddle.h"
+#include "Text.h"
 
 #include <iostream>
 #include <string>
@@ -8,12 +9,16 @@
 #include <Collisions.h>
 
 using namespace std;
+using std::to_string;
 
 void Update();
 void Draw();
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 450;
+
+Text playerScoreText = Text(100, 100, to_string(playerPoints), 20, LIGHTGRAY);
+Text opponentScoreText = Text(SCREEN_WIDTH - 100, 100, to_string(opponentPoints), 20, LIGHTGRAY);
 
 Ball ball;
 Paddle leftPaddle;
@@ -31,7 +36,7 @@ int main()
 	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 4);
 
 	int playerPoints = 0;
-	int enemyPoints = 0;
+	int opponentPoints = 0;
 
 	// Main game loop 
 	while (!WindowShouldClose()) // Detect window close button or ESC key 
@@ -45,40 +50,67 @@ int main()
 	// Close window and OpenGL context 
 }
 
-void Update() 
+void Update()
 {
-	ball.Update();
-	leftPaddle.Update();
-
-	RectangleI ballRect = ball.GetRect();
-	RectangleI leftPaddleRect = leftPaddle.GetRect();
-
-	bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
-	if (colliding)
+	if (results == 0)
 	{
-		ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
+		ball.Update();
+		leftPaddle.Update();
+
+		RectangleI ballRect = ball.GetRect();
+		RectangleI leftPaddleRect = leftPaddle.GetRect();
+
+		bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
+		if (colliding)
+		{
+			ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
+		}
+
+		RectangleI rightPaddleRect = rightPaddle.GetRectangle();
+
+		colliding = Collisions::AABBCollision(ballRect, rightPaddleRect);
+		if (colliding)
+		{
+			ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
+		}
+
+		rightPaddle.UpdateAI(ballRect.y);
+
+		//points system
+		if (ball.GetX() < 0)
+		{
+			++opponentPoints;
+
+			ball.SetX(SCREEN_WIDTH / 2);
+
+			opponentScoreText.SetText(to_string(opponentPoints));
+
+			//you lose
+			if (opponentPoints >= 5)
+			{
+				result = 2;
+				outcomeText.SetText("You Lose");
+			}
+		}
+		else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth())
+		{
+			++playerPoints;
+
+			ball.SetX(SCREEN_WIDTH / 2);
+
+			playerScoreText.SetText(to_string(playerPoints));
+
+			if (playerPoints >= 5)
+			{
+				result = 1;
+				outcomeText.SetText("You Win");
+			}
+		}
 	}
-
-	RectangleI rightPaddleRect = rightPaddle.GetRectangle();
-
-	colliding = Collisions::AABBCollision(ballRect, rightPaddleRect);
-	if (colliding)
+	//end of the game
+	else 
 	{
-		ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
-	}
 
-	rightPaddle.UpdateAI(ballRect.y);
-
-	//points system
-	if (ball.GetX() < 0) 
-	{
-		++opponentPoints;
-		ball.SetX(SCREEN_WIDTH / 2);
-	} 
-	else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth())
-	{
-		++playerPoints;
-		ballSetx(SCREEN_WIDTH / 2);
 	}
 }
 
@@ -88,10 +120,14 @@ void Draw()
 
 	ClearBackground(BLACK);
 
+	playerScoreText.Draw(); 
+
 	ball.Draw();
 
 	leftPaddle.Draw();
 	rightPaddle.Draw(); 
+
+	outcomeText.Draw();
 
 	EndDrawing();
 }

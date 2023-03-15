@@ -1,14 +1,11 @@
 #include "raylib.h" 
 #include "Ball.h" 
-#include <RectangleI.h>
 
 Ball::Ball() 
 {
 	x = 0;
 	y = 0;
-
 	size = 32;
-
 	speedX = 2;
 	speedY = 2;
 }
@@ -33,40 +30,27 @@ void Ball::Update()
 
 	if (x < 0)
 	{
-		HorizontalBounce(0);
+		speedX = -speedX;
+		x = 0;
 	}
 	if (x > screenWidth - size)
 	{
-		HorizontalBounce(screenWidth - size);
+		speedX = -speedX;
+		x = screenWidth - size;
 	}
 	if (y < 0)
 	{
-		VerticalBounce(0);
+		speedY = -speedY;
+		y = 0;
 	}
 	if (y > screenHeight - size)
 	{
-		VerticalBounce(screenHeight - size);
+		speedY = -speedY;
+		y = screenHeight - size;
 	}
 }
 
 void Ball::Draw() 
 {
 	DrawRectangle(x, y, size, size, WHITE);
-}
-
-RectangleI Ball::GetRect()
-{
-	return RectangleI{ x, y, width, height };
-}
-
-void HorizontalBounce(int newX);
-{
-	speedX = -speedX;
-	x = newX;
-}
-
-void VerticalBounce(int newY);
-{
-	speedY = -speedY;
-	y = newY;
 }

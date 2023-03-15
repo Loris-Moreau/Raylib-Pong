@@ -1,9 +1,7 @@
 #pragma once
 
 #ifndef INC_01_PONG_PADDLE_H 
-#define INC_01_PONG_PADDLE_H
-
-#include <RectangleI.h>
+#define INC_01_PONG_PADDLE_H 
 
 class Paddle 
 {
@@ -14,8 +12,6 @@ public:
 
 	void Update();
 	void Draw();
-
-	RectangleI GetRect();
 
 private:
 	int x;

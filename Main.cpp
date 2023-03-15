@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include "Ball.h"
 #include "Paddle.h"
-#include "RectangleI.h"
 
 #include <iostream>
 #include <string>
@@ -42,15 +41,6 @@ void Update()
 {
 	ball.Update();
 	leftPaddle.Update();
-
-	RectangleI ballRect = ball.GetRect();
-	RectangleI leftPaddleRect = leftPaddle.GetRect();
-
-	bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
-	if (colliding)
-	{
-		ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
-	}
 }
 
 void Draw() 

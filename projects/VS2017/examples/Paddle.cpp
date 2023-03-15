@@ -49,7 +49,7 @@ void Paddle::Draw()
 	DrawRectangle(x, y, width, height, WHITE);
 }
 
-RectangleI Paddle::GetRectangle()
+RectangleI Paddle::GetRect()
 {
-	return RectangleI { x, y, width, height };
+	return RectangleI{ x, y, width, height };
 }

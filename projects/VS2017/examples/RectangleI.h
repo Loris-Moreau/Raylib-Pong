@@ -9,7 +9,6 @@ struct RectangleI
 	int y;
 	int width;
 	int height;
-	//void GetRectangle();
 };
 
 #endif

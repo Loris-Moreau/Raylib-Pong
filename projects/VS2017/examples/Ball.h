@@ -1,6 +1,9 @@
 #pragma once
+
 #ifndef INC_01_PONG_BALL_H 
 #define INC_01_PONG_BALL_H 
+
+#include <Rectangle.h>
 
 class Ball 
 {
@@ -12,10 +15,22 @@ public:
 	void Update();
 	void Draw();
 
+	void HorizontalBounce(int newX);
+	void VerticalBounce(int newY);
+
+	RectangleI GetRect();
+
+	int GetX() const;
+	void SetX(int xP);
+
+	int GetWidth() const;
+
 private:
 	int x;
 	int y; 
+
 	int size;
+
 	int speedX;
 	int speedY;
 };

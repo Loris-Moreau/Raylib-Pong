@@ -5,7 +5,9 @@ Ball::Ball()
 {
 	x = 0;
 	y = 0;
+
 	size = 32;
+
 	speedX = 2;
 	speedY = 2;
 }
@@ -28,29 +30,58 @@ void Ball::Update()
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();
 
-	if (x < 0)
+	/*if (x < 0)
 	{
-		speedX = -speedX;
-		x = 0;
+		HorizontalBounce(0);
 	}
 	if (x > screenWidth - size)
 	{
-		speedX = -speedX;
-		x = screenWidth - size;
-	}
+		HorizontalBounce(screenWidth - size);
+	}*/
+
 	if (y < 0)
 	{
-		speedY = -speedY;
-		y = 0;
+		VerticalBounce(0);
 	}
 	if (y > screenHeight - size)
 	{
-		speedY = -speedY;
-		y = screenHeight - size;
+		VerticalBounce(screenHeight - size);
 	}
+}
+
+int Ball::GetX() const
+{
+	return x;
+}
+
+void Ball : SetX(int xP)
+{
+	x = xP;
+}
+
+innt Ball::GetWidth() const
+{
+	return size;
 }
 
 void Ball::Draw() 
 {
 	DrawRectangle(x, y, size, size, WHITE);
+}
+
+RectangleI Ball::GetRect()
+{
+	return RectangleI { x, y, width, height };
+}
+
+void Ball::HorizontalBounce(int newX);
+{
+	speedX = -speedX;
+	x = newX;
+}
+
+void Ball::VerticalBounce(int newY);
+{
+	speedY = -speedY;
+	y = newY;
 }

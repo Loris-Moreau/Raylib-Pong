@@ -33,6 +33,8 @@ private:
 
 	int speedX;
 	int speedY;
+
+	Sound wallSound;
 };
 
 #endif 

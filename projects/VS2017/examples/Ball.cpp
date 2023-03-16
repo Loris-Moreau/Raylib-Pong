@@ -41,10 +41,12 @@ void Ball::Update()
 
 	if (y < 0)
 	{
+		PlaySound(wallSound);
 		VerticalBounce(0);
 	}
 	if (y > screenHeight - size)
 	{
+		PlaySound(wallSound);
 		VerticalBounce(screenHeight - size);
 	}
 }

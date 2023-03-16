@@ -17,8 +17,9 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 450;
 
 int result = 0;
-char playerPoints;
-char opponentPoints;
+
+int playerPoints = 0;
+int opponentPoints = 0;
 
 Text outcomeText = Text(SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/3, "", 40, LIGHTGRAY);
 
@@ -29,19 +30,34 @@ Ball ball;
 Paddle leftPaddle;
 Paddle rightPaddle;
 
+Sound pingSound;		//done
+Sound oponentPingSound;	//done
+Sound outSound;			//done
+Sound wallSound;		//done
+Sound victorySound;		//done
+Sound defeatSound;		//done
+Sound restartSound;		//done
+
 int main() 
 {
 	// Initialization 
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong");
 	SetTargetFPS(60);
 
+	InitAudioDevice();
+	pingSound = LoadSound("assets/ping.wav");
+	oponentPingSound = LoadSound("assets/oponentPing.wav");
+	outSound = LoadSound("assets/out.wav");
+	wallSound = LoadSound("assets/wall.wav");
+	victorySound = LoadSound("assets/victory.wav");
+	defeatSound = LoadSound("assets/defeat.wav");
+	restartSound = LoadSound("assets/restart.wav");
+
+
 	ball = Ball(100, 100, 32, 7);
 
 	leftPaddle = Paddle(0, 200, 32, 128, 4);
 	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 4);
-
-	int playerPoints = 0;
-	int opponentPoints = 0;
 
 	// Main game loop 
 	while (!WindowShouldClose()) // Detect window close button or ESC key 
@@ -49,6 +65,16 @@ int main()
 		Update(); 
 		Draw();
 	}
+
+	UnloadSound(pingSound);
+	UnloadSound(oponentPingSound);
+	UnloadSound(outSound);
+	UnloadSound(wallSound);
+	UnloadSound(victorySound);
+	UnloadSound(defeatSound);
+	UnloadSound(restartSound);
+	CloseAudioDevice();
+
 	CloseWindow(); 
 	return 0;
 
@@ -69,6 +95,8 @@ void Update()
 		if (colliding)
 		{
 			ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
+
+			PlaySound(pingSound);
 		}
 
 		RectangleI rightPaddleRect = rightPaddle.GetRect();
@@ -77,6 +105,8 @@ void Update()
 		if (colliding)
 		{
 			ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
+
+			PlaySound(oponentPingSound);
 		}
 
 		rightPaddle.UpdateAI(ballRect.y);
@@ -90,11 +120,14 @@ void Update()
 
 			opponentScoreText.SetText(to_string(opponentPoints));
 
+			PlaySound(outSound);
+
 			//you lose
 			if (opponentPoints >= 5)
 			{
 				result = 2;
 				outcomeText.SetText("You Lose");
+				PlaySound(defeatSound);
 			}
 		}
 		else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth())
@@ -105,10 +138,13 @@ void Update()
 
 			playerScoreText.SetText(to_string(playerPoints));
 
+			PlaySound(outSound);
+
 			if (playerPoints >= 5)
 			{
 				result = 1;
 				outcomeText.SetText("You Win");
+				PlaySound(victorySound);
 			}
 		}
 	}

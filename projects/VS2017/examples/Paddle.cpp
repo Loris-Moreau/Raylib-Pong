@@ -67,11 +67,12 @@ void Paddle::MoveDown()
 
 void Paddle::UpdateAI(int ballY)
 {
-	if (ballY < y + height / 4) 
+	if (ballY < y + height / 4)
 	{
 		MoveUp();
-}
+	}
 	if (ballY > y + 3 * height / 4)
 	{
 		MoveDown();
 	}
+}

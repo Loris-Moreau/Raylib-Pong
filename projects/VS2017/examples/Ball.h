@@ -3,7 +3,7 @@
 #ifndef INC_01_PONG_BALL_H 
 #define INC_01_PONG_BALL_H 
 
-#include <Rectangle.h>
+#include <RectangleI.h>
 
 class Ball 
 {

@@ -54,12 +54,12 @@ int Ball::GetX() const
 	return x;
 }
 
-void Ball : SetX(int xP)
+void Ball :: SetX(int xP)
 {
 	x = xP;
 }
 
-innt Ball::GetWidth() const
+int Ball::GetWidth() const
 {
 	return size;
 }
@@ -71,16 +71,16 @@ void Ball::Draw()
 
 RectangleI Ball::GetRect()
 {
-	return RectangleI { x, y, width, height };
+	return RectangleI { x, y, size, size };
 }
 
-void Ball::HorizontalBounce(int newX);
+void Ball::HorizontalBounce(int newX)
 {
 	speedX = -speedX;
 	x = newX;
 }
 
-void Ball::VerticalBounce(int newY);
+void Ball::VerticalBounce(int newY)
 {
 	speedY = -speedY;
 	y = newY;

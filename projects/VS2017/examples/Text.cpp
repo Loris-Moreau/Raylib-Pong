@@ -21,7 +21,3 @@ void Text::Draw()
 	DrawText(text.c_str(), x, y, fontSize, color);
 }
 
-void update()
-{
-
-}

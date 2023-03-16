@@ -11,8 +11,8 @@ class Text
 {
 public:
 	Text() = delete;
-	Text(int xP, int yP, string text, int fontSizeP, Color colorP),
-		~Text();
+	Text(int xP, int yP, string text, int fontSizeP, Color colorP);
+	~Text();
 
 	void Draw();
 

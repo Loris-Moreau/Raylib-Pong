@@ -2,7 +2,6 @@
 #include "Ball.h"
 #include "Paddle.h"
 #include "Text.h"
-
 #include <RectangleI.h>
 #include <Collisions.h>
 

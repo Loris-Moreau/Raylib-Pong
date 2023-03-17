@@ -7,7 +7,7 @@ Paddle::Paddle()
 	width = 32; 
 	height = 128; 
 
-	speedY = 4;
+	speedY = 8;
 
 	Paddle::x = 0;
 	Paddle::y = 200;
@@ -49,6 +49,7 @@ RectangleI Paddle::GetRect()
 void Paddle::MoveUp()
 {
 	y -= speedY;
+
 	if (y < 0)
 	{
 		y = 0;

@@ -30,34 +30,34 @@ Ball ball;
 Paddle leftPaddle;
 Paddle rightPaddle;
 
-Sound pingSound;		//done
-Sound oponentPingSound;	//done
-Sound outSound;			//done
-Sound wallSound;		//done
-Sound victorySound;		//done
-Sound defeatSound;		//done
-Sound restartSound;		//done
+Sound pingSound;
+Sound opponentPingSound;
+Sound outSound;
+Sound wallSound;
+Sound victorySound;
+Sound defeatSound;
+Sound restartSound;
 
 int main() 
 {
 	// Initialization 
-	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong");
+	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong of Doom");
 	SetTargetFPS(60);
 
+	//init audio
 	InitAudioDevice();
 	pingSound = LoadSound("assets/ping.wav");
-	oponentPingSound = LoadSound("assets/oponentPing.wav");
+	opponentPingSound = LoadSound("assets/oponentPing.wav");
 	outSound = LoadSound("assets/out.wav");
 	wallSound = LoadSound("assets/wall.wav");
 	victorySound = LoadSound("assets/victory.wav");
 	defeatSound = LoadSound("assets/defeat.wav");
 	restartSound = LoadSound("assets/restart.wav");
 
+	ball = Ball(100, 100, 32, 10);
 
-	ball = Ball(100, 100, 32, 7);
-
-	leftPaddle = Paddle(0, 200, 32, 128, 4);
-	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 4);
+	leftPaddle = Paddle(0, 200, 32, 128, 7);
+	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 7);
 
 	// Main game loop 
 	while (!WindowShouldClose()) // Detect window close button or ESC key 
@@ -66,8 +66,9 @@ int main()
 		Draw();
 	}
 
+	//unload sounds when game close
 	UnloadSound(pingSound);
-	UnloadSound(oponentPingSound);
+	UnloadSound(opponentPingSound);
 	UnloadSound(outSound);
 	UnloadSound(wallSound);
 	UnloadSound(victorySound);
@@ -77,7 +78,6 @@ int main()
 
 	CloseWindow(); 
 	return 0;
-
 	// Close window and OpenGL context 
 }
 
@@ -106,10 +106,11 @@ void Update()
 		{
 			ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
 
-			PlaySound(oponentPingSound);
+			PlaySound(opponentPingSound);
 		}
 
 		rightPaddle.UpdateAI(ballRect.y);
+		//leftPaddle.UpdateAI(ballRect.y);
 
 		//points system
 		if (ball.GetX() < 0)
@@ -162,6 +163,7 @@ void Draw()
 	ClearBackground(BLACK);
 
 	playerScoreText.Draw(); 
+	opponentScoreText.Draw();
 
 	ball.Draw();
 

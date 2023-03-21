@@ -23,7 +23,7 @@ int playerPoints = 0;
 int opponentPoints = 0;
 
 #pragma region Text
-Text outcomeText = Text(SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/3, "", 40, LIGHTGRAY);
+Text outcomeText = Text(SCREEN_WIDTH/2 - 64, SCREEN_HEIGHT/2, "", 40, LIGHTGRAY);
 
 Text playerScoreText = Text(100, 100, to_string(playerPoints), 20, LIGHTGRAY);
 Text opponentScoreText = Text(SCREEN_WIDTH - 100, 100, to_string(opponentPoints), 20, LIGHTGRAY);
@@ -64,6 +64,7 @@ int main()
 
 	ball = Ball(100, 100, 32, 10);
 
+	//Paddles
 	leftPaddle = Paddle(0, 200, 32, 128, 7);
 	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 7);
 
@@ -129,7 +130,7 @@ void Update()
 		#pragma endregion
 
 		rightPaddle.UpdateAI(ballRect.y);
-		//leftPaddle.UpdateAI(ballRect.y);
+		leftPaddle.UpdateAI(ballRect.y);
 
 		//points
 		#pragma region points system
@@ -138,8 +139,10 @@ void Update()
 			//you lose a point
 			++opponentPoints;
 
-			//over here
+			//over here : the ball needs to go towards the one that won a point
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			ball.SetX(SCREEN_WIDTH / 2);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			opponentScoreText.SetText(to_string(opponentPoints));
 
@@ -160,7 +163,9 @@ void Update()
 			++playerPoints;
 
 			//here too
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			ball.SetX(SCREEN_WIDTH / 2);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			playerScoreText.SetText(to_string(playerPoints));
 
@@ -203,12 +208,7 @@ void Draw()
 	EndDrawing();
 }
 
-void ResetBall()
-{
-	
-}
-
-void Restart() 
+void Restart() //done
 {
 	//resets points
 	playerPoints = 0;

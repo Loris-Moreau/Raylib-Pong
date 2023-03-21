@@ -8,8 +8,8 @@ Ball::Ball()
 
 	size = 32;
 
-	speedX = 4;
-	speedY = 4;
+	speedX = 5;
+	speedY = 5;
 }
 
 Ball::Ball(int xP, int yP, int sizeP, int speedP) : x(xP), y(yP), size(sizeP), speedX(speedP), speedY(speedP)

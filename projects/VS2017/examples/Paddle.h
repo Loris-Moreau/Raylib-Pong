@@ -19,7 +19,7 @@ public:
 	void MoveUp();
 	void MoveDown();
 
-	void ResetPaddle();
+	void ResetPaddle(int xP, int yP);
 
 	RectangleI GetRect();
 

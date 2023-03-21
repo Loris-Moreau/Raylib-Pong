@@ -12,6 +12,7 @@ using namespace std;
 
 void Update();
 void Draw();
+void Restart();
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 450;
@@ -69,6 +70,11 @@ int main()
 	// Main game loop 
 	while (!WindowShouldClose()) //Detect window close button or ESC key 
 	{
+		if (IsKeyDown(KEY_R))
+		{
+			Restart();
+		}
+
 		Update(); 
 		Draw();
 	}
@@ -93,11 +99,6 @@ int main()
 
 void Update()
 {
-	if (IsKeyPressed(KEY_R))
-	{
-		restart();
-	}
-
 	if (result == 0)
 	{
 		ball.Update();
@@ -207,7 +208,7 @@ void ResetBall()
 	
 }
 
-void restart() 
+void Restart() 
 {
 	//resets points
 	playerPoints = 0;
@@ -224,6 +225,6 @@ void restart()
 	ball.SetX(SCREEN_WIDTH / 2);
 
 	//resets paddels
-	leftPaddle.ResetPaddle();
-	rightPaddle.ResetPaddle();
+	leftPaddle.ResetPaddle(0, 200);
+	rightPaddle.ResetPaddle(SCREEN_WIDTH - 32, 200);
 }

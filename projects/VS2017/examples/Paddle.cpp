@@ -41,10 +41,10 @@ void Paddle::Draw()
 	DrawRectangle(x, y, width, height, WHITE);
 }
 
-void Paddle::ResetPaddle()
+void Paddle::ResetPaddle(int xP, int yP)
 {
-	x = 0;
-	y = 200;
+	x = xP;
+	y = yP;
 }
 
 RectangleI Paddle::GetRect()

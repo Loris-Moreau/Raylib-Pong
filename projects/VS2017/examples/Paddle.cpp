@@ -41,6 +41,12 @@ void Paddle::Draw()
 	DrawRectangle(x, y, width, height, WHITE);
 }
 
+void Paddle::ResetPaddle()
+{
+	x = 0;
+	y = 200;
+}
+
 RectangleI Paddle::GetRect()
 {
 	return RectangleI { x, y, width, height };

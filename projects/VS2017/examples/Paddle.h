@@ -19,6 +19,8 @@ public:
 	void MoveUp();
 	void MoveDown();
 
+	void ResetPaddle();
+
 	RectangleI GetRect();
 
 private:

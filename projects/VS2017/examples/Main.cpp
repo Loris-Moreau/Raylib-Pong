@@ -21,15 +21,18 @@ int result = 0;
 int playerPoints = 0;
 int opponentPoints = 0;
 
+#pragma region Text
 Text outcomeText = Text(SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/3, "", 40, LIGHTGRAY);
 
 Text playerScoreText = Text(100, 100, to_string(playerPoints), 20, LIGHTGRAY);
 Text opponentScoreText = Text(SCREEN_WIDTH - 100, 100, to_string(opponentPoints), 20, LIGHTGRAY);
+#pragma endregion
 
 Ball ball;
 Paddle leftPaddle;
 Paddle rightPaddle;
 
+#pragma region Sounds
 Sound pingSound;
 Sound opponentPingSound;
 Sound outSound;
@@ -37,15 +40,18 @@ Sound wallSound;
 Sound victorySound;
 Sound defeatSound;
 Sound restartSound;
+#pragma endregion
 
 int main() 
 {
-	// Initialization 
+	//Initialization 
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong of Doom");
 	SetTargetFPS(60);
 
-	//init audio
+	//init sounds
+	#pragma region init audio
 	InitAudioDevice();
+
 	pingSound = LoadSound("assets/ping.wav");
 	opponentPingSound = LoadSound("assets/oponentPing.wav");
 	outSound = LoadSound("assets/out.wav");
@@ -53,6 +59,7 @@ int main()
 	victorySound = LoadSound("assets/victory.wav");
 	defeatSound = LoadSound("assets/defeat.wav");
 	restartSound = LoadSound("assets/restart.wav");
+	#pragma endregion
 
 	ball = Ball(100, 100, 32, 10);
 
@@ -60,13 +67,14 @@ int main()
 	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 7);
 
 	// Main game loop 
-	while (!WindowShouldClose()) // Detect window close button or ESC key 
+	while (!WindowShouldClose()) //Detect window close button or ESC key 
 	{
 		Update(); 
 		Draw();
 	}
 
-	//unload sounds when game close
+	//unload sounds
+	#pragma region unload sounds when game close
 	UnloadSound(pingSound);
 	UnloadSound(opponentPingSound);
 	UnloadSound(outSound);
@@ -74,7 +82,9 @@ int main()
 	UnloadSound(victorySound);
 	UnloadSound(defeatSound);
 	UnloadSound(restartSound);
+
 	CloseAudioDevice();
+	#pragma endregion
 
 	CloseWindow(); 
 	return 0;
@@ -83,11 +93,18 @@ int main()
 
 void Update()
 {
+	if (IsKeyPressed(KEY_R))
+	{
+		restart();
+	}
+
 	if (result == 0)
 	{
 		ball.Update();
 		leftPaddle.Update();
 
+		//collisions
+		#pragma region Collisions
 		RectangleI ballRect = ball.GetRect();
 		RectangleI leftPaddleRect = leftPaddle.GetRect();
 
@@ -108,46 +125,56 @@ void Update()
 
 			PlaySound(opponentPingSound);
 		}
+		#pragma endregion
 
 		rightPaddle.UpdateAI(ballRect.y);
 		//leftPaddle.UpdateAI(ballRect.y);
 
-		//points system
+		//points
+		#pragma region points system
 		if (ball.GetX() < 0)
 		{
+			//you lose a point
 			++opponentPoints;
 
+			//over here
 			ball.SetX(SCREEN_WIDTH / 2);
 
 			opponentScoreText.SetText(to_string(opponentPoints));
 
 			PlaySound(outSound);
 
-			//you lose
+			//you lose the game
 			if (opponentPoints >= 5)
 			{
 				result = 2;
 				outcomeText.SetText("You Lose");
+
 				PlaySound(defeatSound);
 			}
 		}
 		else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth())
 		{
+			//you gain a point
 			++playerPoints;
 
+			//here too
 			ball.SetX(SCREEN_WIDTH / 2);
 
 			playerScoreText.SetText(to_string(playerPoints));
 
 			PlaySound(outSound);
 
+			//you win the game
 			if (playerPoints >= 5)
 			{
 				result = 1;
 				outcomeText.SetText("You Win");
+
 				PlaySound(victorySound);
 			}
 		}
+		#pragma endregion
 	}
 	//end of the game
 	else 
@@ -173,4 +200,30 @@ void Draw()
 	outcomeText.Draw();
 
 	EndDrawing();
+}
+
+void ResetBall()
+{
+	
+}
+
+void restart() 
+{
+	//resets points
+	playerPoints = 0;
+	opponentPoints = 0;
+
+	result = 0;
+
+	//resets text
+	outcomeText.SetText("");
+	playerScoreText.SetText("0");
+	opponentScoreText.SetText("0");
+
+	//Reset Ball
+	ball.SetX(SCREEN_WIDTH / 2);
+
+	//resets paddels
+	leftPaddle.ResetPaddle();
+	rightPaddle.ResetPaddle();
 }

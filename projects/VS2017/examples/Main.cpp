@@ -54,25 +54,18 @@ int main()
 	InitAudioDevice();
 
 	pingSound = LoadSound("../assets/ping.wav");
-	//SetSoundVolume(pingSound, 50);
 
 	opponentPingSound = LoadSound("../assets/oponentPing.wav");
-	//SetSoundVolume(opponentPingSound, 50);
 
 	outSound = LoadSound("../assets/out.wav");
-	//SetSoundVolume(outSound, 50);
 
 	wallSound = LoadSound("../assets/wall.wav");
-	//SetSoundVolume(wallSound, 50);
 
 	victorySound = LoadSound("../assets/victory.wav");
-	//SetSoundVolume(victorySound, 50);
 
 	defeatSound = LoadSound("../assets/defeat.wav");
-	//SetSoundVolume(defeatSound, 50);
 
 	restartSound = LoadSound("../assets/restart.wav");
-	//SetSoundVolume(restartSound, 50);
 	#pragma endregion
 
 	ball = Ball(100, 100, 32, 10, wallSound);
@@ -102,12 +95,12 @@ int main()
 	UnloadSound(victorySound);
 	UnloadSound(defeatSound);
 	UnloadSound(restartSound);
-	cout << "STOP" << endl;
+
 	//CloseAudioDevice();
 	#pragma endregion
-	cout << "PLS" << endl;
+
 	CloseWindow(); 
-	cout << "THX" << endl;
+
 	return 0;
 	// Close window and OpenGL context 
 }
@@ -154,9 +147,10 @@ void Update()
 			++opponentPoints;
 
 			//over here : the ball needs to go towards the one that won a point
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------
 			ball.SetX(SCREEN_WIDTH / 2);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			ball.HorizontalBounce(SCREEN_WIDTH/2);
+//------------------------------------------------------------------------------------------------------------------------
 
 			opponentScoreText.SetText(to_string(opponentPoints));
 
@@ -177,9 +171,10 @@ void Update()
 			++playerPoints;
 
 			//here too
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------------------------------------------
 			ball.SetX(SCREEN_WIDTH / 2);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			ball.HorizontalBounce(SCREEN_WIDTH/2);
+//------------------------------------------------------------------------------------------------------------------------
 
 			playerScoreText.SetText(to_string(playerPoints));
 

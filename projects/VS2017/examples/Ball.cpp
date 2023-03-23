@@ -12,9 +12,8 @@ Ball::Ball()
 	speedY = 5;
 }
 
-Ball::Ball(int xP, int yP, int sizeP, int speedP) : x(xP), y(yP), size(sizeP), speedX(speedP), speedY(speedP)
+Ball::Ball(int xP, int yP, int sizeP, int speedP, Sound& wallS) : x(xP), y(yP), size(sizeP), speedX(speedP), speedY(speedP), wallSound(&wallS)
 {
-
 }
 
 Ball::~Ball() 
@@ -41,13 +40,13 @@ void Ball::Update()
 
 	if (y < 0)
 	{
-		PlaySound(wallSound);
+		PlaySoundMulti(*wallSound);
 
 		VerticalBounce(0);
 	}
 	if (y > screenHeight - size)
 	{
-		PlaySound(wallSound);
+		PlaySoundMulti(*wallSound);
 
 		VerticalBounce(screenHeight - size);
 	}

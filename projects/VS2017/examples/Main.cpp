@@ -53,16 +53,29 @@ int main()
 	#pragma region init audio
 	InitAudioDevice();
 
-	pingSound = LoadSound("assets/ping.wav");
-	opponentPingSound = LoadSound("assets/oponentPing.wav");
-	outSound = LoadSound("assets/out.wav");
-	wallSound = LoadSound("assets/wall.wav");
-	victorySound = LoadSound("assets/victory.wav");
-	defeatSound = LoadSound("assets/defeat.wav");
-	restartSound = LoadSound("assets/restart.wav");
+	pingSound = LoadSound("../assets/ping.wav");
+	//SetSoundVolume(pingSound, 50);
+
+	opponentPingSound = LoadSound("../assets/oponentPing.wav");
+	//SetSoundVolume(opponentPingSound, 50);
+
+	outSound = LoadSound("../assets/out.wav");
+	//SetSoundVolume(outSound, 50);
+
+	wallSound = LoadSound("../assets/wall.wav");
+	//SetSoundVolume(wallSound, 50);
+
+	victorySound = LoadSound("../assets/victory.wav");
+	//SetSoundVolume(victorySound, 50);
+
+	defeatSound = LoadSound("../assets/defeat.wav");
+	//SetSoundVolume(defeatSound, 50);
+
+	restartSound = LoadSound("../assets/restart.wav");
+	//SetSoundVolume(restartSound, 50);
 	#pragma endregion
 
-	ball = Ball(100, 100, 32, 10);
+	ball = Ball(100, 100, 32, 10, wallSound);
 
 	//Paddles
 	leftPaddle = Paddle(0, 200, 32, 128, 7);
@@ -79,7 +92,7 @@ int main()
 		Update(); 
 		Draw();
 	}
-
+	
 	//unload sounds
 	#pragma region unload sounds when game close
 	UnloadSound(pingSound);
@@ -89,11 +102,12 @@ int main()
 	UnloadSound(victorySound);
 	UnloadSound(defeatSound);
 	UnloadSound(restartSound);
-
-	CloseAudioDevice();
+	cout << "STOP" << endl;
+	//CloseAudioDevice();
 	#pragma endregion
-
+	cout << "PLS" << endl;
 	CloseWindow(); 
+	cout << "THX" << endl;
 	return 0;
 	// Close window and OpenGL context 
 }
@@ -115,7 +129,7 @@ void Update()
 		{
 			ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
 
-			PlaySound(pingSound);
+			PlaySoundMulti(pingSound);
 		}
 
 		RectangleI rightPaddleRect = rightPaddle.GetRect();
@@ -125,7 +139,7 @@ void Update()
 		{
 			ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
 
-			PlaySound(opponentPingSound);
+			PlaySoundMulti(opponentPingSound);
 		}
 		#pragma endregion
 
@@ -146,7 +160,7 @@ void Update()
 
 			opponentScoreText.SetText(to_string(opponentPoints));
 
-			PlaySound(outSound);
+			PlaySoundMulti(outSound);
 
 			//you lose the game
 			if (opponentPoints >= 5)
@@ -154,7 +168,7 @@ void Update()
 				result = 2;
 				outcomeText.SetText("You Lose");
 
-				PlaySound(defeatSound);
+				PlaySoundMulti(defeatSound);
 			}
 		}
 		else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth())
@@ -169,7 +183,7 @@ void Update()
 
 			playerScoreText.SetText(to_string(playerPoints));
 
-			PlaySound(outSound);
+			PlaySoundMulti(outSound);
 
 			//you win the game
 			if (playerPoints >= 5)
@@ -177,7 +191,7 @@ void Update()
 				result = 1;
 				outcomeText.SetText("You Win");
 
-				PlaySound(victorySound);
+				PlaySoundMulti(victorySound);
 			}
 		}
 		#pragma endregion
@@ -210,6 +224,8 @@ void Draw()
 
 void Restart() //done
 {
+	PlaySoundMulti(restartSound);
+
 	//resets points
 	playerPoints = 0;
 	opponentPoints = 0;

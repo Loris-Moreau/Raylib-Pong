@@ -9,7 +9,7 @@ class Ball
 {
 public:
 	Ball();
-	Ball(int xP, int yP, int sizeP, int speedP); 
+	Ball(int xP, int yP, int sizeP, int speedP, Sound& wallS); 
 	~Ball();
 
 	void Update();
@@ -34,7 +34,7 @@ private:
 	int speedX;
 	int speedY;
 
-	Sound wallSound;
+	Sound* wallSound;
 };
 
 #endif 

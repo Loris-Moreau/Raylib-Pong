@@ -137,7 +137,7 @@ void Update()
 		#pragma endregion
 
 		rightPaddle.UpdateAI(ballRect.y);
-		leftPaddle.UpdateAI(ballRect.y);
+		//leftPaddle.UpdateAI(ballRect.y);
 
 		//points
 		#pragma region points system
@@ -146,7 +146,7 @@ void Update()
 			//you lose a point
 			++opponentPoints;
 
-			//over here : the ball needs to go towards the one that won a point
+			//the ball goes towards the one that won a point
 //------------------------------------------------------------------------------------------------------------------------
 			ball.SetX(SCREEN_WIDTH / 2);
 			ball.HorizontalBounce(SCREEN_WIDTH/2);
@@ -170,7 +170,7 @@ void Update()
 			//you gain a point
 			++playerPoints;
 
-			//here too
+			//the ball goes towards the one that won a point
 //------------------------------------------------------------------------------------------------------------------------
 			ball.SetX(SCREEN_WIDTH / 2);
 			ball.HorizontalBounce(SCREEN_WIDTH/2);

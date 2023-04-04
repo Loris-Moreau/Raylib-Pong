@@ -1,90 +1,82 @@
-#include "raylib.h" 
-#include "Ball.h" 
+#include "raylib.h"
 
-Ball::Ball() 
-{
-	x = 0;
-	y = 0;
+#include "Ball.h"
 
-	size = 32;
+Ball::Ball() {
+    x = 0;
+    y = 0;
 
-	speedX = 5;
-	speedY = 5;
+    size = 32;
+
+    speedX = 5;
+    speedY = 5;
 }
 
-Ball::Ball(int xP, int yP, int sizeP, int speedP, Sound& wallS) : x(xP), y(yP), size(sizeP), speedX(speedP), speedY(speedP), wallSound(&wallS)
-{
-}
+Ball::Ball(int xP, int yP, int sizeP, int speedP, Sound& wallS) : x(xP), y(yP), size(sizeP), speedX(speedP), speedY(speedP), wallSound(&wallS) {}
 
-Ball::~Ball() 
-{
+Ball::~Ball() {
 
 }
 
-void Ball::Update() 
-{
-	x += speedX;
-	y += speedY;
+void Ball::Update() {
+    x += speedX;
+    y += speedY;
 
-	int screenWidth = GetScreenWidth();
-	int screenHeight = GetScreenHeight();
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
 
-	/*if (x < 0)
-	{
-		HorizontalBounce(0);
-	}
-	if (x > screenWidth - size)
-	{
-		HorizontalBounce(screenWidth - size);
-	}*/
+    /*if (x < 0)
+    {
+      HorizontalBounce(0);
+    }
+    if (x > screenWidth - size)
+    {
+      HorizontalBounce(screenWidth - size);
+    }*/
 
-	if (y < 0)
-	{
-		PlaySoundMulti(*wallSound);
+    if (y < 0) {
+        PlaySoundMulti(*wallSound);
 
-		VerticalBounce(0);
-	}
-	if (y > screenHeight - size)
-	{
-		PlaySoundMulti(*wallSound);
+        VerticalBounce(0);
+    }
+    if (y > screenHeight - size) {
+        PlaySoundMulti(*wallSound);
 
-		VerticalBounce(screenHeight - size);
-	}
+        VerticalBounce(screenHeight - size);
+    }
 }
 
-int Ball::GetX() const
-{
-	return x;
+int Ball::GetX() const {
+    return x;
 }
 
-void Ball :: SetX(int xP)
-{
-	x = xP;
+void Ball::SetX(int xP) {
+    x = xP;
 }
 
-int Ball::GetWidth() const
-{
-	return size;
+int Ball::GetWidth() const {
+    return size;
 }
 
-void Ball::Draw() 
-{
-	DrawRectangle(x, y, size, size, WHITE);
+void Ball::Draw() {
+    DrawRectangle(x, y, size, size, WHITE);
 }
 
-RectangleI Ball::GetRect()
-{
-	return RectangleI { x, y, size, size };
+RectangleI Ball::GetRect() {
+    return RectangleI {
+      x,
+      y,
+      size,
+      size
+    };
 }
 
-void Ball::HorizontalBounce(int newX)
-{
-	speedX = -speedX;
-	x = newX;
+void Ball::HorizontalBounce(int newX) {
+    speedX = -speedX;
+    x = newX;
 }
 
-void Ball::VerticalBounce(int newY)
-{
-	speedY = -speedY;
-	y = newY;
+void Ball::VerticalBounce(int newY) {
+    speedY = -speedY;
+    y = newY;
 }

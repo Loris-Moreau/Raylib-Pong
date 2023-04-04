@@ -1,11 +1,17 @@
 #include "raylib.h"
+
 #include "Ball.h"
+
 #include "Paddle.h"
+
 #include "Text.h"
+
 #include <RectangleI.h>
+
 #include <Collisions.h>
 
 #include <iostream>
+
 #include <string>
 
 using namespace std;
@@ -23,7 +29,7 @@ int playerPoints = 0;
 int opponentPoints = 0;
 
 #pragma region Text
-Text outcomeText = Text(SCREEN_WIDTH/2 - 64, SCREEN_HEIGHT/2, "", 40, LIGHTGRAY);
+Text outcomeText = Text(SCREEN_WIDTH / 2 - 64, SCREEN_HEIGHT / 2, "", 40, LIGHTGRAY);
 
 Text playerScoreText = Text(100, 100, to_string(playerPoints), 20, LIGHTGRAY);
 Text opponentScoreText = Text(SCREEN_WIDTH - 100, 100, to_string(opponentPoints), 20, LIGHTGRAY);
@@ -43,199 +49,187 @@ Sound defeatSound;
 Sound restartSound;
 #pragma endregion
 
-int main() 
-{
-	//Initialization 
-	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong of Doom");
-	SetTargetFPS(60);
+int main() {
+  //Initialization 
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong of Doom");
+    SetTargetFPS(60);
 
-	//init sounds
-	#pragma region init audio
-	InitAudioDevice();
+    //init sounds
+#pragma region init audio
+    InitAudioDevice();
 
-	pingSound = LoadSound("../assets/ping.wav");
+    pingSound = LoadSound("../assets/ping.wav");
 
-	opponentPingSound = LoadSound("../assets/oponentPing.wav");
+    opponentPingSound = LoadSound("../assets/oponentPing.wav");
 
-	outSound = LoadSound("../assets/out.wav");
+    outSound = LoadSound("../assets/out.wav");
 
-	wallSound = LoadSound("../assets/wall.wav");
+    wallSound = LoadSound("../assets/wall.wav");
 
-	victorySound = LoadSound("../assets/victory.wav");
+    victorySound = LoadSound("../assets/victory.wav");
 
-	defeatSound = LoadSound("../assets/defeat.wav");
+    defeatSound = LoadSound("../assets/defeat.wav");
 
-	restartSound = LoadSound("../assets/restart.wav");
-	#pragma endregion
+    restartSound = LoadSound("../assets/restart.wav");
+#pragma endregion
 
-	ball = Ball(100, 100, 32, 10, wallSound);
+    ball = Ball(100, 100, 32, 10, wallSound);
 
-	//Paddles
-	leftPaddle = Paddle(0, 200, 32, 128, 7);
-	rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 7);
+    //Paddles
+    leftPaddle = Paddle(0, 200, 32, 128, 7);
+    rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 7);
 
-	// Main game loop 
-	while (!WindowShouldClose()) //Detect window close button or ESC key 
-	{
-		if (IsKeyDown(KEY_R))
-		{
-			Restart();
-		}
+    // Main game loop 
+    while (!WindowShouldClose()) //Detect window close button or ESC key 
+    {
+        if (IsKeyDown(KEY_R)) {
+            Restart();
+        }
 
-		Update(); 
-		Draw();
-	}
-	
-	//unload sounds
-	#pragma region unload sounds when game close
-	UnloadSound(pingSound);
-	UnloadSound(opponentPingSound);
-	UnloadSound(outSound);
-	UnloadSound(wallSound);
-	UnloadSound(victorySound);
-	UnloadSound(defeatSound);
-	UnloadSound(restartSound);
+        Update();
+        Draw();
+    }
 
-	//CloseAudioDevice();
-	#pragma endregion
+    //unload sounds
+#pragma region unload sounds when game close
+    UnloadSound(pingSound);
+    UnloadSound(opponentPingSound);
+    UnloadSound(outSound);
+    UnloadSound(wallSound);
+    UnloadSound(victorySound);
+    UnloadSound(defeatSound);
+    UnloadSound(restartSound);
 
-	CloseWindow(); 
+    //CloseAudioDevice();
+#pragma endregion
 
-	return 0;
-	// Close window and OpenGL context 
+    CloseWindow();
+
+    return 0;
+    // Close window and OpenGL context 
 }
 
-void Update()
-{
-	if (result == 0)
-	{
-		ball.Update();
-		leftPaddle.Update();
+void Update() {
+    if (result == 0) {
+        ball.Update();
+        leftPaddle.Update();
 
-		//collisions
-		#pragma region Collisions
-		RectangleI ballRect = ball.GetRect();
-		RectangleI leftPaddleRect = leftPaddle.GetRect();
+        //collisions
+#pragma region Collisions
+        RectangleI ballRect = ball.GetRect();
+        RectangleI leftPaddleRect = leftPaddle.GetRect();
 
-		bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
-		if (colliding)
-		{
-			ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
+        bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
+        if (colliding) {
+            ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
 
-			PlaySoundMulti(pingSound);
-		}
+            PlaySoundMulti(pingSound);
+        }
 
-		RectangleI rightPaddleRect = rightPaddle.GetRect();
+        RectangleI rightPaddleRect = rightPaddle.GetRect();
 
-		colliding = Collisions::AABBCollision(ballRect, rightPaddleRect);
-		if (colliding)
-		{
-			ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
+        colliding = Collisions::AABBCollision(ballRect, rightPaddleRect);
+        if (colliding) {
+            ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
 
-			PlaySoundMulti(opponentPingSound);
-		}
-		#pragma endregion
+            PlaySoundMulti(opponentPingSound);
+        }
+#pragma endregion
 
-		rightPaddle.UpdateAI(ballRect.y);
-		//leftPaddle.UpdateAI(ballRect.y);
+        rightPaddle.UpdateAI(ballRect.y);
+        //leftPaddle.UpdateAI(ballRect.y);
 
-		//points
-		#pragma region points system
-		if (ball.GetX() < 0)
-		{
-			//you lose a point
-			++opponentPoints;
+        //points
+#pragma region points system
+        if (ball.GetX() < 0) {
+          //you lose a point
+            ++opponentPoints;
 
-			//the ball goes towards the one that won a point
-//------------------------------------------------------------------------------------------------------------------------
-			ball.SetX(SCREEN_WIDTH / 2);
-			ball.HorizontalBounce(SCREEN_WIDTH/2);
-//------------------------------------------------------------------------------------------------------------------------
+            //the ball goes towards the one that won a point
+            //------------------------------------------------------------------------------------------------------------------------
+            ball.SetX(SCREEN_WIDTH / 2);
+            ball.HorizontalBounce(SCREEN_WIDTH / 2);
+            //------------------------------------------------------------------------------------------------------------------------
 
-			opponentScoreText.SetText(to_string(opponentPoints));
+            opponentScoreText.SetText(to_string(opponentPoints));
 
-			PlaySoundMulti(outSound);
+            PlaySoundMulti(outSound);
 
-			//you lose the game
-			if (opponentPoints >= 5)
-			{
-				result = 2;
-				outcomeText.SetText("You Lose");
+            //you lose the game
+            if (opponentPoints >= 5) {
+                result = 2;
+                outcomeText.SetText("You Lose");
 
-				PlaySoundMulti(defeatSound);
-			}
-		}
-		else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth())
-		{
-			//you gain a point
-			++playerPoints;
+                PlaySoundMulti(defeatSound);
+            }
+        }
+        else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth()) {
+       //you gain a point
+            ++playerPoints;
 
-			//the ball goes towards the one that won a point
-//------------------------------------------------------------------------------------------------------------------------
-			ball.SetX(SCREEN_WIDTH / 2);
-			ball.HorizontalBounce(SCREEN_WIDTH/2);
-//------------------------------------------------------------------------------------------------------------------------
+            //the ball goes towards the one that won a point
+            //------------------------------------------------------------------------------------------------------------------------
+            ball.SetX(SCREEN_WIDTH / 2);
+            ball.HorizontalBounce(SCREEN_WIDTH / 2);
+            //------------------------------------------------------------------------------------------------------------------------
 
-			playerScoreText.SetText(to_string(playerPoints));
+            playerScoreText.SetText(to_string(playerPoints));
 
-			PlaySoundMulti(outSound);
+            PlaySoundMulti(outSound);
 
-			//you win the game
-			if (playerPoints >= 5)
-			{
-				result = 1;
-				outcomeText.SetText("You Win");
+            //you win the game
+            if (playerPoints >= 5) {
+                result = 1;
+                outcomeText.SetText("You Win");
 
-				PlaySoundMulti(victorySound);
-			}
-		}
-		#pragma endregion
-	}
-	//end of the game
-	else 
-	{
+                PlaySoundMulti(victorySound);
+            }
+        }
+#pragma endregion
+    }
+    //end of the game
+    else {
 
-	}
+    }
 }
 
-void Draw() 
-{
-	BeginDrawing();
+void Draw() {
+    BeginDrawing();
 
-	ClearBackground(BLACK);
+    ClearBackground(BLACK);
 
-	playerScoreText.Draw(); 
-	opponentScoreText.Draw();
+    playerScoreText.Draw();
+    opponentScoreText.Draw();
 
-	ball.Draw();
+    ball.Draw();
 
-	leftPaddle.Draw();
-	rightPaddle.Draw(); 
+    leftPaddle.Draw();
+    rightPaddle.Draw();
 
-	outcomeText.Draw();
+    outcomeText.Draw();
 
-	EndDrawing();
+    EndDrawing();
 }
 
 void Restart() //done
 {
-	PlaySoundMulti(restartSound);
+    PlaySoundMulti(restartSound);
 
-	//resets points
-	playerPoints = 0;
-	opponentPoints = 0;
+    //resets points
+    playerPoints = 0;
+    opponentPoints = 0;
 
-	result = 0;
+    result = 0;
 
-	//resets text
-	outcomeText.SetText("");
-	playerScoreText.SetText("0");
-	opponentScoreText.SetText("0");
+    //resets text
+    outcomeText.SetText("");
+    playerScoreText.SetText("0");
+    opponentScoreText.SetText("0");
 
-	//Reset Ball
-	ball.SetX(SCREEN_WIDTH / 2);
+    //Reset Ball
+    ball.SetX(SCREEN_WIDTH / 2);
 
-	//resets paddels
-	leftPaddle.ResetPaddle(0, 200);
-	rightPaddle.ResetPaddle(SCREEN_WIDTH - 32, 200);
+    //resets paddels
+    leftPaddle.ResetPaddle(0, 200);
+    rightPaddle.ResetPaddle(SCREEN_WIDTH - 32, 200);
 }

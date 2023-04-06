@@ -13,7 +13,8 @@ Paddle::Paddle()
 	Paddle::y = 200;
 }
 
-Paddle::Paddle(int xP, int yP, int widthP, int heightP, int speedP) : x(xP), y(yP), width(widthP), height(heightP), speedY(speedP)
+Paddle::Paddle(int xP, int yP, int widthP, int heightP, int speedP)
+	: x(xP), y(yP), width(widthP), height(heightP), speedY(speedP)
 {
 
 }

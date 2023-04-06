@@ -1,17 +1,11 @@
 #include "raylib.h"
-
 #include "Ball.h"
-
 #include "Paddle.h"
-
 #include "Text.h"
 
 #include <RectangleI.h>
-
 #include <Collisions.h>
-
 #include <iostream>
-
 #include <string>
 
 using namespace std;
@@ -49,7 +43,8 @@ Sound defeatSound;
 Sound restartSound;
 #pragma endregion
 
-int main() {
+int main() 
+{
   //Initialization 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong of Doom");
     SetTargetFPS(60);
@@ -79,10 +74,11 @@ int main() {
     leftPaddle = Paddle(0, 200, 32, 128, 7);
     rightPaddle = Paddle(SCREEN_WIDTH - 32, 200, 32, 128, 7);
 
-    // Main game loop 
+    //Main game loop 
     while (!WindowShouldClose()) //Detect window close button or ESC key 
     {
-        if (IsKeyDown(KEY_R)) {
+        if (IsKeyDown(KEY_R)) 
+        {
             Restart();
         }
 
@@ -110,7 +106,8 @@ int main() {
 }
 
 void Update() {
-    if (result == 0) {
+    if (result == 0) 
+    {
         ball.Update();
         leftPaddle.Update();
 
@@ -120,7 +117,8 @@ void Update() {
         RectangleI leftPaddleRect = leftPaddle.GetRect();
 
         bool colliding = Collisions::AABBCollision(ballRect, leftPaddleRect);
-        if (colliding) {
+        if (colliding) 
+        {
             ball.HorizontalBounce(leftPaddleRect.x + leftPaddleRect.width);
 
             PlaySoundMulti(pingSound);
@@ -129,7 +127,8 @@ void Update() {
         RectangleI rightPaddleRect = rightPaddle.GetRect();
 
         colliding = Collisions::AABBCollision(ballRect, rightPaddleRect);
-        if (colliding) {
+        if (colliding) 
+        {
             ball.HorizontalBounce(rightPaddleRect.x - ballRect.width);
 
             PlaySoundMulti(opponentPingSound);
@@ -141,44 +140,44 @@ void Update() {
 
         //points
 #pragma region points system
-        if (ball.GetX() < 0) {
+        if (ball.GetX() < 0) 
+        {
           //you lose a point
             ++opponentPoints;
 
-            //the ball goes towards the one that won a point
-            //------------------------------------------------------------------------------------------------------------------------
+//the ball goes towards the one that won a point
             ball.SetX(SCREEN_WIDTH / 2);
             ball.HorizontalBounce(SCREEN_WIDTH / 2);
-            //------------------------------------------------------------------------------------------------------------------------
 
             opponentScoreText.SetText(to_string(opponentPoints));
 
             PlaySoundMulti(outSound);
 
             //you lose the game
-            if (opponentPoints >= 5) {
+            if (opponentPoints >= 5) 
+            {
                 result = 2;
                 outcomeText.SetText("You Lose");
 
                 PlaySoundMulti(defeatSound);
             }
         }
-        else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth()) {
-       //you gain a point
+        else if (ball.GetX() > SCREEN_WIDTH - ball.GetWidth()) 
+        {
+         //you gain a point
             ++playerPoints;
 
-            //the ball goes towards the one that won a point
-            //------------------------------------------------------------------------------------------------------------------------
+//the ball goes towards the one that won a point
             ball.SetX(SCREEN_WIDTH / 2);
             ball.HorizontalBounce(SCREEN_WIDTH / 2);
-            //------------------------------------------------------------------------------------------------------------------------
 
             playerScoreText.SetText(to_string(playerPoints));
 
             PlaySoundMulti(outSound);
 
             //you win the game
-            if (playerPoints >= 5) {
+            if (playerPoints >= 5) 
+            {
                 result = 1;
                 outcomeText.SetText("You Win");
 
@@ -188,12 +187,14 @@ void Update() {
 #pragma endregion
     }
     //end of the game
-    else {
+    else 
+    {
 
     }
 }
 
-void Draw() {
+void Draw() 
+{
     BeginDrawing();
 
     ClearBackground(BLACK);
@@ -211,7 +212,7 @@ void Draw() {
     EndDrawing();
 }
 
-void Restart() //done
+void Restart()
 {
     PlaySoundMulti(restartSound);
 
@@ -229,7 +230,7 @@ void Restart() //done
     //Reset Ball
     ball.SetX(SCREEN_WIDTH / 2);
 
-    //resets paddels
+    //resets paddles
     leftPaddle.ResetPaddle(0, 200);
     rightPaddle.ResetPaddle(SCREEN_WIDTH - 32, 200);
 }
